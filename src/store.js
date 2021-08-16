@@ -7,5 +7,5 @@ const reducer = combineReducers({
 });
 
 const store = createStore(reducer, composeWithDevTools());
-
+console.log('test');
 export default store;
