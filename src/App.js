@@ -5,10 +5,17 @@ import data from './data.js'
 import { Routes } from './components/Routes';
 import { useDispatch } from 'react-redux';
 import { initializeRoutes } from './reducers/routeReducer';
+import { Filter } from './components/Filter';
+import { initializAirlines } from './reducers/airlineReducer';
+import { initializeAirports } from './reducers/airportReducer';
 
 const App = () => {
   const dispatch = useDispatch();
-  useEffect(() => dispatch(initializeRoutes()), [dispatch])
+  useEffect(() => {
+    dispatch(initializeRoutes());
+    dispatch(initializAirlines());
+    dispatch(initializeAirports());
+  }, [dispatch])
 
   return (
     <div className="app">
@@ -16,9 +23,7 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
-        <p>
-          Welcome to the app!
-        </p>
+        <Filter />
         <Routes />
       </section>
     </div>
