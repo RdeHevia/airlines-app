@@ -34,7 +34,7 @@ export const airportReducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT_AIRPORTS':
       return action.data;
-    case 'FILTER':    
+    case 'FILTER':
       const airports = state;
       const { airlineId, airportCode, airlineAirports } = action.data;
       return airports.map(airport => {

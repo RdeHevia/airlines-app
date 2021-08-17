@@ -37,6 +37,14 @@ const Select = ({ list, handler, valueKey, currentValue, title}) => {
   );
 }
 
+const ClearFilter = ({ handler }) => {
+  return (
+    <>
+      <button onClick={handler}>Show All Routes</button>
+    </>
+  );
+}
+
 export const Filter = () => {
   const dispatch = useDispatch();
 
@@ -59,22 +67,32 @@ export const Filter = () => {
     dispatch(filter({...currentFilter, airportCode, airportAirlines}));
   }
 
+  const handleClearFilter = event => {
+    event.preventDefault();
+    dispatch(filter({
+      ...currentFilter,
+      airlineId: "all",
+      airportCode: "all"
+    }));
+  }
+
   return (
     <p>
       Show routes on
       <Select list={useSelector(state => state.airlines)} 
               handler={handleAirlineSelection}
               valueKey="id"
-              currentValue={useSelector(state => state.filter.airline)}
+              currentValue={useSelector(state => state.filter.airlineId)}
               title="All Airlines"
       />
       flying in or out of
       <Select list={useSelector(state => state.airports)} 
               handler={handleAirportSelection}
               valueKey="code"
-              currentValue={useSelector(state => state.filter.airport)}
+              currentValue={useSelector(state => state.filter.airportCode)}
               title="All Airports"
       />
+      <ClearFilter handler={handleClearFilter} />
     </p>
   )
 }
