@@ -1,10 +1,62 @@
-import { getAllRoutes } from '../services/routesAPI';
+import { getAllRoutes, cache, getAll } from '../services/routesAPI';
 
 // ACTION CREATORS
-export const initializeRoutes = () => {
+export const initializeRoutesSS = () => {
   return {
     type: 'INIT_ROUTES',
     data: getAllRoutes(),
+  }
+}
+
+const getAirlineById = (id, airlines) => {
+  for (let idx = 0; idx < airlines.length; idx++) {
+    let airline = airlines[idx];
+    if (airline.id === id) return airline.name;
+  }
+  return null;
+}
+const getAirportNameById = (id, airports) => {
+  for (let idx = 0; idx < airports.length; idx++) {
+    let airport = airports[idx];
+    if (airport.code === id) return airport.name;
+  }
+
+  return null;
+}
+
+const getAirportCoordinatesById = (id, airports) => {
+  for (let idx = 0; idx < airports.length; idx++) {
+    let airport = airports[idx];
+    if (airport.code === id) return [airport.lat, airport.long];
+  }
+  return [null, null];
+}
+
+export const initializeRoutes = () => {
+  const {routesRAW, airlinesRAW, airportsRAW} = 
+    JSON.stringify(cache) === '{}' ? getAll() : cache;
+
+  const routes = routesRAW.map(routeRAW => {
+    const [srcLat, srcLong] = getAirportCoordinatesById(routeRAW.src, airportsRAW);
+    const [destLat, destLong] = getAirportCoordinatesById(routeRAW.dest, airportsRAW);
+    const id = `${routeRAW.airline}-${routeRAW.src}-${routeRAW.dest}`;
+    const route = {
+      ...routeRAW,
+      airlineName: getAirlineById(routeRAW.airline, airlinesRAW),
+      srcName: getAirportNameById(routeRAW.src, airportsRAW),
+      srcLat,
+      srcLong,
+      destName: getAirportNameById(routeRAW.dest, airportsRAW),
+      destLat,
+      destLong,
+      id
+    }
+    return route;
+  });
+
+  return {
+    type: 'INIT_ROUTES',
+    data: routes,
   }
 }
 
@@ -44,18 +96,7 @@ export const routeReducer = (
       const { airlineId, airportCode } = action.data;
       const routes = state.all;
 
-      const updatedRoutes = routes.map(route => {
-        if (
-          (route.airline === airlineId || airlineId === "all") &&
-          (route.src === airportCode || route.dest === airportCode || airportCode === "all")
-        ) {
-          return {...route, display: true};
-        } else {
-          return {...route, display: false};
-        }
-      });
-
-      const filteredRoutesIndexes = routes.reduce((filteredIndexes,route, idx) => {
+      const filteredRoutesIndexes = routes.reduce((filteredIndexes, route, idx) => {
         if (
           (route.airline === airlineId || airlineId === "all") &&
           (route.src === airportCode || route.dest === airportCode || airportCode === "all")
@@ -69,10 +110,9 @@ export const routeReducer = (
       const sliceStart = 0;
       const sliceEnd =
         25 > filteredRoutesIndexes.length ? filteredRoutesIndexes.length : 25;
-
+    
       return {
         ...state,
-        all: updatedRoutes,
         filteredRoutesIndexes,
         displayRange: [sliceStart, sliceEnd]
       };

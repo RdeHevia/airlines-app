@@ -3,6 +3,7 @@ import './App.css';
 import data from './data.js'
 // import { nanoid } from 'nanoid'
 import { Routes } from './components/Routes';
+import { Map } from './components/Map';
 import { useDispatch } from 'react-redux';
 import { initializeRoutes } from './reducers/routeReducer';
 import { Filter } from './components/Filter';
@@ -23,6 +24,7 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
+        <Map />
         <Filter />
         <Routes />
       </section>

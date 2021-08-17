@@ -23,19 +23,20 @@ const getAirportById = id => {
 };
 
 export const getAllRoutes = () => {
-  return data.routes.map(route => {
-    let routeProcessed = {
-      ...route,
-      airlineName: getAirlineById(route.airline),
-      srcName: getAirportById(route.src),
-      destName: getAirportById(route.dest),
-      display: true,
-    }
+  // return data.routes.map(route => {
+  //   let routeProcessed = {
+  //     ...route,
+  //     airlineName: getAirlineById(route.airline),
+  //     srcName: getAirportById(route.src),
+  //     destName: getAirportById(route.dest),
+  //     display: true,
+  //   }
 
-    routeProcessed.id = `${route.airline}-${route.src}-${route.dest}`;
+  //   routeProcessed.id = `${route.airline}-${route.src}-${route.dest}`;
 
-    return routeProcessed;
-  });
+  //   return routeProcessed;
+  // });
+  return data.routes;
 }
 
 export const getAllAirlines = () => {
