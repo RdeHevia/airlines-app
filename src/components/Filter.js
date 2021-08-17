@@ -4,23 +4,6 @@ import { filter } from '../reducers/filterReducer';
 import { findAirportsByAirline } from '../reducers/airlineReducer';
 import { getAllAirlines } from '../services/routesAPI';
 import { findAirlinesByAirport } from '../reducers/airportReducer';
-/*
-- filter by airline
-- filter by airport
-- reset
-*/
-
-/*
-HANDLE FILTER BY AIRLINE
-- id = selected option's value
-- dispatch (filterByAirline(id))
-- 
----------
-- list all airlines
-- greyout airlines that have been filtered out
-- onChange -> dispatch(filterByAirline)
-
-*/
 
 const Select = ({ list, handler, valueKey, currentValue, title}) => {
   return (
@@ -37,10 +20,11 @@ const Select = ({ list, handler, valueKey, currentValue, title}) => {
   );
 }
 
-const ClearFilter = ({ handler }) => {
+const ClearFilter = ({ handler, airlineId, airportCode }) => {
+  const disabled = airlineId === "all" && airportCode === "all";
   return (
     <>
-      <button onClick={handler}>Show All Routes</button>
+      <button onClick={handler} disabled={disabled}>Show All Routes</button>
     </>
   );
 }
@@ -50,7 +34,7 @@ export const Filter = () => {
 
   
   const currentFilter = useSelector(state => state.filter);
-  const routes = useSelector(state => state.routes);
+  const routes = useSelector(state => state.routes.all);
 
 
   const handleAirlineSelection = event => {
@@ -92,7 +76,10 @@ export const Filter = () => {
               currentValue={useSelector(state => state.filter.airportCode)}
               title="All Airports"
       />
-      <ClearFilter handler={handleClearFilter} />
+      <ClearFilter handler={handleClearFilter}
+                   airlineId={currentFilter.airlineId}
+                   airportCode={currentFilter.airportCode}
+      />
     </p>
   )
 }
