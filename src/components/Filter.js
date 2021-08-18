@@ -2,25 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { filter } from '../reducers/filterReducer';
 import { findAirportsByAirline } from '../reducers/airlineReducer';
-import { getAllAirlines } from '../services/routesAPI';
 import { findAirlinesByAirport } from '../reducers/airportReducer';
-/*
-- filter by airline
-- filter by airport
-- reset
-*/
-
-/*
-HANDLE FILTER BY AIRLINE
-- id = selected option's value
-- dispatch (filterByAirline(id))
-- 
----------
-- list all airlines
-- greyout airlines that have been filtered out
-- onChange -> dispatch(filterByAirline)
-
-*/
 
 const Select = ({ list, handler, valueKey, currentValue, title}) => {
   return (
@@ -37,12 +19,19 @@ const Select = ({ list, handler, valueKey, currentValue, title}) => {
   );
 }
 
+const ClearFilter = ({ handler, airlineId, airportCode }) => {
+  const disabled = airlineId === "all" && airportCode === "all";
+  return (
+    <>
+      <button onClick={handler} disabled={disabled}>Show All Routes</button>
+    </>
+  );
+}
+
 export const Filter = () => {
   const dispatch = useDispatch();
-
-  
   const currentFilter = useSelector(state => state.filter);
-  const routes = useSelector(state => state.routes);
+  const routes = useSelector(state => state.routes.all);
 
 
   const handleAirlineSelection = event => {
@@ -59,21 +48,34 @@ export const Filter = () => {
     dispatch(filter({...currentFilter, airportCode, airportAirlines}));
   }
 
+  const handleClearFilter = event => {
+    event.preventDefault();
+    dispatch(filter({
+      ...currentFilter,
+      airlineId: "all",
+      airportCode: "all"
+    }));
+  }
+
   return (
     <p>
       Show routes on
       <Select list={useSelector(state => state.airlines)} 
               handler={handleAirlineSelection}
               valueKey="id"
-              currentValue={useSelector(state => state.filter.airline)}
+              currentValue={useSelector(state => state.filter.airlineId)}
               title="All Airlines"
       />
       flying in or out of
       <Select list={useSelector(state => state.airports)} 
               handler={handleAirportSelection}
               valueKey="code"
-              currentValue={useSelector(state => state.filter.airport)}
+              currentValue={useSelector(state => state.filter.airportCode)}
               title="All Airports"
+      />
+      <ClearFilter handler={handleClearFilter}
+                   airlineId={currentFilter.airlineId}
+                   airportCode={currentFilter.airportCode}
       />
     </p>
   )

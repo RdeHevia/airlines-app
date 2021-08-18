@@ -1,6 +1,6 @@
 import { cache, getAll } from "../services/routesAPI";
 
-// HELPERS
+// HELPER
 export const findAirportsByAirline = (airlineId, routesRAW) => {
   const airports = {};
   routesRAW.forEach(route => {
@@ -12,7 +12,7 @@ export const findAirportsByAirline = (airlineId, routesRAW) => {
   return airports;
 }
 
-// ACTION CREATORS
+// ACTION CREATOR
 export const initializAirlines = () => {
   const {routesRAW, airlinesRAW} = 
     JSON.stringify(cache) === '{}' ? getAll() : cache;

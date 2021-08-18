@@ -5,14 +5,6 @@ import { airportReducer } from './reducers/airportReducer';
 import { routeReducer } from './reducers/routeReducer';
 import { filterReducer } from './reducers/filterReducer';
 
-/*
-STORE:
-  - routes : routeReducer
-  - airlines: airlineReducer
-  - airports: airportReducer
-  - filter: filterReducer
-*/
-
 const reducer = combineReducers({
   routes: routeReducer,
   airlines: airlineReducer,
