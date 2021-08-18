@@ -18,6 +18,7 @@ const RouteVector = ({x1, y1, x2, y2}) => {
 export const Map = () => {
   const { all:routes, filteredRoutesIndexes } =
     useSelector(state => state.routes);
+
   return (
   <svg className="map" viewBox="-180 -90 360 180">
     <g transform="scale(1 -1)">

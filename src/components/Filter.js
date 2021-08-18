@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { filter } from '../reducers/filterReducer';
 import { findAirportsByAirline } from '../reducers/airlineReducer';
-import { getAllAirlines } from '../services/routesAPI';
 import { findAirlinesByAirport } from '../reducers/airportReducer';
 
 const Select = ({ list, handler, valueKey, currentValue, title}) => {
@@ -31,8 +30,6 @@ const ClearFilter = ({ handler, airlineId, airportCode }) => {
 
 export const Filter = () => {
   const dispatch = useDispatch();
-
-  
   const currentFilter = useSelector(state => state.filter);
   const routes = useSelector(state => state.routes.all);
 

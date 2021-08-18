@@ -9,7 +9,7 @@ const Route = ({ route }) => {
       <td>{route.srcName}</td>
       <td>{route.destName}</td>
     </tr>
-  )
+  );
 }
 
 const ChangePage = ({
@@ -19,8 +19,10 @@ const ChangePage = ({
   sliceEnd,
   numberOfRoutes
 }) => {
+
   const previousDisabled = (sliceStart === 0);
   const nextDisabled = (sliceEnd === numberOfRoutes);
+
   return (
     <div className="pagination">
       <p>Showing {sliceStart + 1}-{sliceEnd} of {numberOfRoutes} routes.</p>
@@ -36,6 +38,7 @@ const ChangePage = ({
 
 export const Routes = () => {
   const dispatch = useDispatch();
+
   const {all:routes, filteredRoutesIndexes, displayRange} =
     useSelector(state => state.routes);
   const numberOfRoutes = filteredRoutesIndexes.length;

@@ -1,13 +1,6 @@
 import { getAllRoutes, cache, getAll } from '../services/routesAPI';
 
-// ACTION CREATORS
-export const initializeRoutesSS = () => {
-  return {
-    type: 'INIT_ROUTES',
-    data: getAllRoutes(),
-  }
-}
-
+// HELPERS
 const getAirlineById = (id, airlines) => {
   for (let idx = 0; idx < airlines.length; idx++) {
     let airline = airlines[idx];
@@ -32,6 +25,7 @@ const getAirportCoordinatesById = (id, airports) => {
   return [null, null];
 }
 
+// ACTION CREATORS
 export const initializeRoutes = () => {
   const {routesRAW, airlinesRAW, airportsRAW} = 
     JSON.stringify(cache) === '{}' ? getAll() : cache;
